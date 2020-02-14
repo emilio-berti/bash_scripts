@@ -1,0 +1,32 @@
+#!/bin/bash
+
+touch $1_$2.csv
+touch $1_$2.txt
+rm $1_$2.csv
+rm $1_$2.txt
+
+if [ "$1" == "-h" ]; then
+    echo "Usage: `basename $0`
+    Download biotic interactions from the GLOBI database.
+      GLOBI x y z
+      - x is the Genus
+      - y is the species
+      - z is the type of interaction.
+    A list of all available interactions can be found at: https://api.globalbioticinteractions.org/interactionTypes"
+    exit 0
+fi
+
+if [ -z "$1" ] || [ -z "$2" ] || [ -z "$3" ]; then
+    echo "Error: missing input argument(s). Type GLOBI -h for help."
+else
+    #download json file using the GLOBI API
+    wget --output-document=$1_$2.txt \
+        https://api.globalbioticinteractions.org/taxon/$1%20$2/$3?includeObservations=true
+
+    cat $1_$2.txt | tail -n 2 | tr [ '\n' | cut -d , -f 1,3 | tr -d } |\
+        sed 1,/^$data/d | sed /^$/d | sort | uniq >> $1_$2.csv #write csv file with data
+
+    rm $1_$2.txt #remove jason file
+
+    echo "Download $1 $2 with interaction $3 from GLOBI completed"
+fi
