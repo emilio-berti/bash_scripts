@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [ "$1" == "-h" ]; then
+    echo "Usage: `basename $0`
+    Delete all files older than 'x' minutes every 'y' seconds.
+      delold x y
+      - x is number of minutes
+      - y is the number o seconds
+    Options:
+	-l: save a list of deleted files in files_deleted.txt"
+    exit 0
+fi
+
+echo Deleting files older than $1 minutes - checking every $2 seconds.
+
+while [ 1 ] 
+do
+	if [ $3 = -l ]
+	then
+		touch files_deleted.txt #update report file so it doesn't get deleted
+		find . -type f -mmin +$1 >> files_deleted.txt
+		cat files_deleted.txt | sort | uniq > files_deleted.txt
+	fi
+	find . -type f -mmin +$1 -delete
+	sleep $2
+done
