@@ -1,0 +1,17 @@
+#!/bin/bash
+
+url=https://en.wikipedia.org/wiki/$1
+
+curl -s $url -o tmp_wiki.html #download wikipage
+
+name=$(cat tmp_wiki.html | grep -i '<title>' | cut -d '>' -f 2 | cut -d '<' -f 1 | cut -d '-' -f 1) #get title of the page
+
+cat tmp_wiki.html  | grep 'used as' | grep food > tmp_use.html
+
+pandoc tmp_use.html -o tmp_use.txt
+
+usage=$(cat tmp_use.txt | grep 'used as' | cut -d '[' -f 2 | cut -d ']' -f 1)
+
+echo $1, $name, $usage, $url
+
+#rm tmp_wiki.html
