@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo ----- Getting ID of folder $1
+id=$(gdrive list -m 10000 | grep $1 | cut -d ' ' -f 1)
+echo ID of folder $1: $id
+echo ----- Downloading all children files
+echo Query: " '$id' in parents "
+gdrive download query " '$id' in parents "
