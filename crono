@@ -1,0 +1,11 @@
+#!/bin/bash
+
+start=`date +%s`
+while [ true ]
+do
+  sleep 0.5
+  now=`date +%s`
+  delta=$((now - start))
+  ans=$(date -d@$delta -u +%H:%M:%S)
+  echo -ne '\r '$ans
+done
