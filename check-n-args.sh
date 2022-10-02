@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if(($# < 3))
+if (($# < 3))
 then
   printf "%b""Error. Not enough arguments.\n"
   printf "%b""usage: myscript file1 op file2\n"
