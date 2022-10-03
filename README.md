@@ -10,6 +10,45 @@ If you want to exit the shell when an error occurres *set* will do the trick: `s
 
 If you want to run a child process that doesn't terminate when you exit the shell, use *nohup*: `nohup command`.
 
+To remove with prompt files containing a string:
+```bash
+rm -i $(grep -l 'This file is obsolete' * )
+```
+
+## awk
+
+awk is a complete programming language for string manipulation.
+
+awk has a default variable *NF* that stores the number of fields (integer); *$NF* is instead the last field (string).
+
+To print the *n* word in a line:
+```bash
+awk '{print $1}' < file.txt 
+```
+To reverse the words in a line:
+```bash
+awk '{for (i=NF; i>=0; i--) {printf "%s ", $i;} printf "\n"}' filename
+```
+
+awk can take a command that is ran at the beginning or at the end using the keywords *BEGIN* and *END*. For example, to count the sum of all sizes of files:
+```bash
+ls -l | awk '{sum += $5}; END {print sum}'
+```
+
+To skip a line of text depending on how it starts:
+```bash
+ls -l | awk '/^total/{next} {sum += 5}; END {print sum}'
+```
+This skip (*next*) every line that starts with 't-o-t-a-l', but execute the sum for every one else.
+
+Print a paragraph with a keyphrase (paragraphs are separated by blank lines):
+```bash
+/keyphrase/ { flag=1 }
+flag == 1 { print }
+/^$/ { flag = 0 }
+```
+and `awk -f para.awk -v keyphrase < myfile`
+
 ## logic and arithmetic
 
 Use *$(( ))* or *let* for arithmetic expressions:
