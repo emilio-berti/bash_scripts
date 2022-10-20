@@ -21,11 +21,25 @@ This is a built-in function that creates menus and perform operations on choices
 
 ```bash
 #!/bin/bash
-files="$(ls | grep .txt$) Exit"
+
+# some args cheks
+if (( $# == 0 ))
+then
+  ext=".txt$"
+elif (( $# > 1 ))
+then
+  printf "%b" "Error. Only one (optional) argument can be passed.\n"
+  exit 1
+else
+  ext=$1
+fi
+
+# main procedure
+files="Exit $(ls | grep $ext)"
 PS3='File to print? ' #select prompt
 until [ "$file" == "Exit" ]
 do
-	printf "%b" "\a\n\nSelect a file to print:\n" >&2
+	printf "%b" "\aSelect a file to print:\n" >&2
 	select file in $files
 	do
 		if [ "$file" == "Exit" ]
@@ -42,7 +56,6 @@ do
 		fi
 	done
 done
-
 ```
 
 ## awk
