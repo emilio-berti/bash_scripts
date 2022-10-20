@@ -15,6 +15,36 @@ To remove with prompt files containing a string:
 rm -i $(grep -l 'This file is obsolete' * )
 ```
 
+## select
+
+This is a built-in function that creates menus and perform operations on choices.
+
+```bash
+#!/bin/bash
+files="$(ls | grep .txt$) Exit"
+PS3='File to print? ' #select prompt
+until [ "$file" == "Exit" ]
+do
+	printf "%b" "\a\n\nSelect a file to print:\n" >&2
+	select file in $files
+	do
+		if [ "$file" == "Exit" ]
+		then
+			echo "Exiting..."
+		break
+		elif [ -n "$file" ]
+		then
+			echo "Printing $file..."
+			head $file
+			break #necessary to go back to menu
+		else
+			echo "Invalid selection!"
+		fi
+	done
+done
+
+```
+
 ## awk
 
 awk is a complete programming language for string manipulation.
