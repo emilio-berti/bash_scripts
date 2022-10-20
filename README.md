@@ -22,7 +22,6 @@ This is a built-in function that creates menus and perform operations on choices
 ```bash
 #!/bin/bash
 
-# some args cheks
 if (( $# == 0 ))
 then
   ext=".txt$"
@@ -34,12 +33,12 @@ else
   ext=$1
 fi
 
-# main procedure
+cols=$(tput cols)
 files="Exit $(ls | grep $ext)"
 PS3='File to print? ' #select prompt
 until [ "$file" == "Exit" ]
 do
-	printf "%b" "\aSelect a file to print:\n" >&2
+	printf "%b" "\a\nSelect a file to print:\n" >&2
 	select file in $files
 	do
 		if [ "$file" == "Exit" ]
@@ -48,8 +47,13 @@ do
 		break
 		elif [ -n "$file" ]
 		then
-			echo "Printing $file..."
+			cols=$(tput cols)
+			printf "%b" "Printing $file...\n\n"
+			for (( i=1 ; i < $cols; i++ )); do printf "%b" "=" ; done
+                        printf "%b" "\b\n"
 			head $file
+			for (( i=1 ; i < $cols; i++ )); do printf "%b" "=" ; done
+                        printf "%b" "\b\n"
 			break #necessary to go back to menu
 		else
 			echo "Invalid selection!"
@@ -57,6 +61,7 @@ do
 	done
 done
 ```
+The above will prompt a menu asking for a file to be _head_-ed.
 
 ## awk
 
