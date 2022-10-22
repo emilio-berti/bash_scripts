@@ -174,5 +174,31 @@ For floating values:
 for float in $(seq 1.0 .01 1.1) ...
 ```
 
+# Dates 
+
+ISO 8601 is a good standard to display dates. Set it up with, or alias it with:
+```bash
+ISO_8601='%Y-%m-%d %H:%M:%S %Z'
+date "+$ISO_8601" #don't put the + in the variable itself
+
+alias isodate="date '+%Y-%m-%d %H:%M:%S %Z'"
+```
+
+```
+$ isodate
+2022-10-22 08:43:35 CEST
+```
+
+Date to Epoch seconds: `date "+%s".
+
+_printf -v var comm_ assign to variable _var_ the output of _comm_. This can be useful to make logs with date:
+```bash
+$ printf -v today '%(%F_%T)T'
+$ printf $today
+2022-10-22_09:03:39
+```
+
+The '%(%F_%T)T' stands for today's date (%F) and time (%T).
+
 # gdrive (use at your own risk)
 https://github.com/prasmussen/gdrive
