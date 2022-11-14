@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if (( $# == 0 ))
+then
+  ext=".txt"
+elif (( $# > 1 ))
+then
+  printf "%b" "Error. Only one (optional) argument can be passed.\n"
+  exit 1
+else
+  ext=$1
+fi
+
+cols=$(tput cols)
+files="Exit $(ls | grep $ext$)"
+PS3='File to print? ' #select prompt
+until [ "$file" == "Exit" ]
+do
+	printf "%b" "\a\nSelect a file to print:\n" >&2
+	select file in $files
+	do
+		if [ "$file" == "Exit" ]
+		then
+			echo "Exiting..."
+		break
+		elif [ -n "$file" ]
+		then
+			cols=$(tput cols)
+			printf "%b" "Printing $file...\n\n"
+			for (( i=1 ; i < $cols; i++ )); do printf "%b" "=" ; done
+                        printf "%b" "\b\n"
+			head -n 3 $file
+			for (( i=1 ; i < $cols; i++ )); do printf "%b" "=" ; done
+                        printf "%b" "\b\n"
+			break #necessary to go back to menu
+		else
+			echo "Invalid selection"
+		fi
+	done
+done
